@@ -1,4 +1,4 @@
-# Water Retail Sales Analysis Using SQL
+# Water Retail Sales Analysis Using SQL 🥤🛒🔍
 
 ## Overview
 This project showcases end-to-end data analysis on a retail sales dataset 
@@ -148,20 +148,20 @@ SELECT COUNT(DISTINCT OrderID) as total_orders FROM orders;
 SELECT COUNT(*) FROM orderitem;
 ```
 ### 4. Data Analysis & Findings
-#### 1. Retrieve all columns for sales made on a specific day ('2015-07-01)
+#### Q1. Retrieve all columns for sales made on a specific day ('2015-07-01)
 ``` sql
 SELECT * 
 FROM orders 
 WHERE CreationDate = '2015-08-17';
 ```
-#### 2. Retrive all columns for sales made on a specific month of August 2015
+#### Q2. Retrive all columns for sales made on a specific month of August 2015
 ``` sql
 SELECT * 
 FROM orders 
 WHERE DATE_FORMAT(CreationDate, '%Y-%m') = '2015-08'
 ORDER BY CreationDate ASC;
 ```
-#### 3. Retrieve the sales transactions from the earliest and latest dates in the table
+#### Q3. Retrieve the sales transactions from the earliest and latest dates in the table
 ``` sql
 SELECT * 
 FROM orders
@@ -170,7 +170,7 @@ WHERE
 	CreationDate = (SELECT MAX(CreationDate) FROM orders)
 ORDER BY CreationDate;
 ```
-#### 4. Identify the state with the highest number of customers
+#### Q4. Identify the state with the highest number of customers
 ``` sql
 SELECT 
 	state, 
@@ -179,7 +179,7 @@ FROM customer
 GROUP BY state
 ORDER BY num_cust DESC;
 ```
-#### 5. Count the number of transactions where the product variety is 'Blueberry' and the quantity sold greater than 10
+#### Q5. Count the number of transactions where the product variety is 'Blueberry' and the quantity sold greater than 10
 ``` sql
 SELECT COUNT(DISTINCT OrderID)
 FROM orderitem 
@@ -187,7 +187,7 @@ WHERE
 	quantity > 10 
 AND ProductID IN (SELECT ProductID from product WHERE variety = 'Blueberry');
 ```
-#### 6. Identify the total number of sales for each product variety
+#### Q6. Identify the total number of sales for each product variety
 ``` sql
 SELECT 
 	Variety, 
@@ -198,7 +198,7 @@ JOIN product p
 GROUP BY Variety
 ORDER BY num_sales DESC;
 ```
-#### 7. Calculate the total sales for each product variety
+#### Q7. Calculate the total sales for each product variety
 ``` sql
 SELECT 
 	p.Variety, 
@@ -213,7 +213,7 @@ WHERE
 GROUP BY p.Variety
 ORDER BY total_sales DESC;
 ```
-#### 8. Calculate the average sales, average number of customer, average quantity for each month and identify the best-selling month in each year
+#### Q8. Calculate the average sales, average number of customer, average quantity for each month and identify the best-selling month in each year
 ``` sql
 SELECT
 	YEAR(o.CreationDate) AS order_year,
@@ -226,7 +226,7 @@ FROM orderitem oi
 GROUP BY order_year, order_month
 ORDER BY order_year, order_month;
 ```
-#### 9. Sales Person Segmentation
+#### Q9. Sales Person Segmentation
 ``` sql
 SELECT 
 	sp.SalespersonID,
@@ -248,7 +248,7 @@ FROM salesperson sp
 GROUP BY sp.SalespersonID, sp.FirstName, sp.LastName
 ORDER BY total_sales DESC;
 ```
-#### 10. Customer Segmentation
+#### Q10. Customer Segmentation
 ``` sql
 SELECT 
 	c.CustomerID,
@@ -269,7 +269,7 @@ FROM customer c
 GROUP BY c.CustomerID, c.FirstName, c.LastName
 ORDER BY total_sales DESC;
 ```
-#### 11. Sales Cumulative Analysis
+#### Q11. Sales Cumulative Analysis
 ``` sql
 -- Calculate the total sales per month and the running total of sales over time
 -- (This helps to understand whether the business is growing or declining)
@@ -286,7 +286,7 @@ FROM (
 	GROUP BY DATE_FORMAT(CreationDate, '%Y-%m-01')
 ) AS monthly_data;
 ```
-#### 12. Proportional Analysis
+#### Q12. Proportional Analysis
 ``` sql
 -- (Helps identify which category/variety product contributes the most to the business)
 WITH total_sales_category AS (
@@ -310,7 +310,7 @@ SELECT
 FROM total_sales_category
 ORDER BY total_sales_cat DESC;
 ```
-#### 13. Performance Analysis
+#### Q13. Performance Analysis
 ``` sql
 -- Compare current year sales with previous year sales
 -- (Provides insight into business growth through year-over-year sales analysis)
