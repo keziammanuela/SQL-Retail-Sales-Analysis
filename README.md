@@ -332,21 +332,21 @@ SELECT
 	order_year,
 	product_name,
 	total_sales,
-  -- Rata-rata penjualan per produk
+  	-- Average sales per product
 	AVG(total_sales) OVER(PARTITION BY product_name) AS average_sales,
-  -- Difference from product's average sales
+  	-- Difference from product's average sales
 	total_sales - AVG(total_sales) OVER(PARTITION BY product_name) AS diff_average,
-  -- Category based on deviation from average sales
+  	-- Category based on deviation from average sales
 	CASE 
 		WHEN total_sales - AVG(total_sales) OVER(PARTITION BY product_name) > 0 THEN 'Above Average'
 		WHEN total_sales - AVG(total_sales) OVER(PARTITION BY product_name) < 0 THEN 'Below Average'
 		ELSE 'Average'
 	END AS Average_Change,
-  -- Previous year’s sales
+  	-- Previous year’s sales
 	LAG(total_sales) OVER (PARTITION BY product_name ORDER BY order_year) AS p_y_sales,
-  -- Difference from previous year’s sales
+  	-- Difference from previous year’s sales
 	total_sales - LAG(total_sales) OVER (PARTITION BY product_name ORDER BY order_year) AS diff_p_y,
-  -- Year-over-year growth category
+  	-- Year-over-year growth category
 	CASE 
 		WHEN total_sales - LAG(total_sales) OVER (PARTITION BY product_name ORDER BY order_year) > 0 THEN 'Increase'
 		WHEN total_sales - LAG(total_sales) OVER (PARTITION BY product_name ORDER BY order_year) < 0 THEN 'Decrease'
