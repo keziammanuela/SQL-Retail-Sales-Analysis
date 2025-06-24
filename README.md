@@ -181,7 +181,8 @@ ORDER BY num_cust DESC;
 ```
 #### Q5. Count the number of transactions where the product variety is 'Blueberry' and the quantity sold greater than 10
 ``` sql
-SELECT COUNT(DISTINCT OrderID)
+SELECT
+	COUNT(DISTINCT OrderID)
 FROM orderitem 
 WHERE 
 	quantity > 10 
@@ -217,7 +218,7 @@ ORDER BY total_sales DESC;
 ``` sql
 SELECT
 	YEAR(o.CreationDate) AS order_year,
-    MONTH(o.CreationDate) AS order_month,
+	MONTH(o.CreationDate) AS order_month,
 	ROUND(AVG(o.TotalDue), 2) AS avg_sales,
 	ROUND(AVG(oi.quantity)) as avg_quantity
 FROM orderitem oi
@@ -230,16 +231,16 @@ ORDER BY order_year, order_month;
 ``` sql
 SELECT 
 	sp.SalespersonID,
-    sp.FirstName,
-    sp.LastName,
+    	sp.FirstName,
+    	sp.LastName,
 	CASE 
 		WHEN COUNT(DISTINCT o.OrderID) >= 10 OR SUM(o.TotalDue) > 500 THEN 'High Performer'
 		WHEN COUNT(DISTINCT o.OrderID) >= 5 OR SUM(o.TotalDue) BETWEEN 250 AND 500 THEN 'Medium Performer'
 		ELSE 'Low Performer'
-    END salesperson_category,
-    ROUND(SUM(o.TotalDue), 2) AS total_sales,
-    COUNT(DISTINCT o.OrderID) AS total_orders,
-    SUM(oi.Quantity) AS total_items_sold
+    	END salesperson_category,
+    	ROUND(SUM(o.TotalDue), 2) AS total_sales,
+    	COUNT(DISTINCT o.OrderID) AS total_orders,
+    	SUM(oi.Quantity) AS total_items_sold
 FROM salesperson sp
 	JOIN orders o 
 		ON sp.SalespersonID = o.SalespersonID
@@ -252,15 +253,15 @@ ORDER BY total_sales DESC;
 ``` sql
 SELECT 
 	c.CustomerID,
-    c.FirstName,
-    c.LastName,
+    	c.FirstName,
+    	c.LastName,
 	CASE 
 		WHEN COUNT(DISTINCT o.OrderID) >= 3 OR SUM(o.TotalDue) > 400 THEN 'Top Buyer'
 		ELSE 'New'
-    END customer_category,
-    ROUND(SUM(o.TotalDue), 2) AS total_sales,
-    COUNT(DISTINCT o.OrderID) AS total_orders,
-    SUM(oi.Quantity) AS total_items_sold
+    	END customer_category,
+    	ROUND(SUM(o.TotalDue), 2) AS total_sales,
+    	COUNT(DISTINCT o.OrderID) AS total_orders,
+    	SUM(oi.Quantity) AS total_items_sold
 FROM customer c
 	JOIN orders o 
 		ON c.CustomerID = o.CustomerID
