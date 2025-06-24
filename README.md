@@ -18,7 +18,13 @@ By creating and using a structured water retail sales database (including Custom
 This project uses data from [this GitHub repository](https://github.com/haonguyen9802/Analysing-H-Sport-Retail-Data-Using-SQL/tree/main), with some changes applied to facilitate deeper analysis.
 
 ## Project Structure
-1. Database setup
-2. Data cleaning
-3. Data Exploration (EDA)
-4. Data Analysis & Findings
+### 1. Database setup
+CREATE DATABASE water_retail_sales;
+USE water_retail_sales;
+
+### 2. Data cleaning
+   
+### 3. Data Exploration (EDA)
+   
+### 4. Data Analysis & Findings
+   
