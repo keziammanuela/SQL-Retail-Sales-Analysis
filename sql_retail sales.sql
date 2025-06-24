@@ -101,31 +101,31 @@ SELECT *
 FROM customer
 WHERE 
 	CustomerID IS NULL OR FirstName IS NULL OR LastName IS NULL OR Email IS NULL OR 
-    Phone IS NULL OR Address IS NULL OR City IS NULL OR State IS NULL OR Zipcode IS NULL;
+    	Phone IS NULL OR Address IS NULL OR City IS NULL OR State IS NULL OR Zipcode IS NULL;
 
 SELECT * 
 FROM customer
 WHERE 
 	CustomerID IS NULL OR FirstName IS NULL OR LastName IS NULL OR Email IS NULL OR 
-    Phone IS NULL OR Address IS NULL OR City IS NULL OR State IS NULL OR Zipcode IS NULL;
+    	Phone IS NULL OR Address IS NULL OR City IS NULL OR State IS NULL OR Zipcode IS NULL;
     
 SELECT * 
 FROM salesperson
 WHERE 
 	SalespersonID IS NULL OR FirstName IS NULL OR LastName IS NULL OR Email IS NULL OR 
-    Phone IS NULL OR Address IS NULL OR City IS NULL OR State IS NULL OR Zipcode IS NULL;
+    	Phone IS NULL OR Address IS NULL OR City IS NULL OR State IS NULL OR Zipcode IS NULL;
     
 SELECT * 
 FROM orders
 WHERE 
 	OrderID IS NULL OR CreationDate IS NULL OR TotalDue IS NULL OR Status IS NULL OR 
-    CustomerID IS NULL OR SalespersonID IS NULL;
+    	CustomerID IS NULL OR SalespersonID IS NULL;
     
 SELECT * 
 FROM product
 WHERE 
 	ProductID IS NULL OR ProductCode IS NULL OR ProductName IS NULL OR Size IS NULL OR 
-    Variety IS NULL OR Price IS NULL OR Status IS NULL;
+    	Variety IS NULL OR Price IS NULL OR Status IS NULL;
 
 SELECT * 
 FROM orderitem
@@ -138,117 +138,142 @@ WHERE
 
 -- 1. Retrieve all columns for sales made on a specific day ('2015-07-01)
 SELECT * 
-FROM orders 
-WHERE CreationDate = '2015-08-17';
+FROM 
+	orders 
+WHERE 
+	CreationDate = '2015-08-17';
 
 
 -- 2. Retrive all columns for sales made on a specific month of August 2015
 SELECT * 
-FROM orders 
-WHERE DATE_FORMAT(CreationDate, '%Y-%m') = '2015-08'
-ORDER BY CreationDate ASC;
+FROM 
+	orders 
+WHERE 
+	DATE_FORMAT(CreationDate, '%Y-%m') = '2015-08'
+ORDER BY 
+	CreationDate ASC;
 
 
 -- 3. Retrieve the sales transactions from the earliest and latest dates in the table
 SELECT * 
-FROM orders
+FROM 
+	orders
 WHERE
 	CreationDate = (SELECT MIN(CreationDate) FROM orders) OR
 	CreationDate = (SELECT MAX(CreationDate) FROM orders)
-ORDER BY CreationDate;
+ORDER BY 
+	CreationDate;
 
 
 -- 4. Identify the state with the highest number of customers
 SELECT 
 	state, 
 	COUNT(CustomerID) AS num_cust
-FROM customer
-GROUP BY state
-ORDER BY num_cust DESC;
+FROM 
+	customer
+GROUP BY 
+	state
+ORDER BY 
+	num_cust DESC;
 
 
 -- 5. Count the number of transactions where the product variety is 'Blueberry' and the quantity sold greater than 10
-SELECT COUNT(DISTINCT OrderID)
+SELECT 
+	COUNT(DISTINCT OrderID)
 FROM 
 	orderitem 
 WHERE 
 	quantity > 10 AND 
-    ProductID IN (SELECT ProductID from product WHERE variety = 'Blueberry');
+    	ProductID IN (SELECT ProductID from product WHERE variety = 'Blueberry');
 
 
 -- 6. Identify the total number of sales for each product variety
 SELECT 
 	Variety, 
 	COUNT(DISTINCT OrderID) AS num_sales
-FROM orderitem oi
+FROM 
+	orderitem oi
 	JOIN product p
 		ON oi.ProductID = p.ProductID
-GROUP BY Variety
-ORDER BY num_sales DESC;
+GROUP BY 
+	Variety
+ORDER BY 
+	num_sales DESC;
 
 
 -- 7. Calculate the total sales for each product variety 
 SELECT 
 	p.Variety, 
 	ROUND(SUM(o.TotalDue), 2) as total_sales
-FROM orderitem oi
+FROM 
+	orderitem oi
 	JOIN orders o 
 		ON oi.OrderID = o.OrderID
 	JOIN product p 
 		ON oi.ProductID = p.ProductID
-WHERE o.Status = 'paid'
-GROUP BY p.Variety
-ORDER BY total_sales DESC;
+WHERE 
+	o.Status = 'paid'
+GROUP BY 
+	p.Variety
+ORDER BY 
+	total_sales DESC;
 
 
 -- 8. Calculate the average sales, average number of customer, average quantity for each month and identify the best-selling month in each year
 SELECT
 	YEAR(o.CreationDate) AS order_year,
-    MONTH(o.CreationDate) AS order_month,
+    	MONTH(o.CreationDate) AS order_month,
 	ROUND(AVG(o.TotalDue), 2) AS avg_sales,
 	ROUND(AVG(oi.quantity)) as avg_quantity
-FROM orderitem oi
+FROM 
+	orderitem oi
 	JOIN orders o 
 		ON oi.OrderID = o.OrderID
-GROUP BY order_year, order_month
-ORDER BY order_year, order_month;
+GROUP BY 
+	order_year, order_month
+ORDER BY 
+	order_year, order_month;
 
 
 -- 9. Sales Person Segmentation
 SELECT 
 	sp.SalespersonID,
-    sp.FirstName,
-    sp.LastName,
+	sp.FirstName,
+	sp.LastName,
 	CASE 
 		WHEN COUNT(DISTINCT o.OrderID) >= 10 OR SUM(o.TotalDue) > 500 THEN 'High Performer'
 		WHEN COUNT(DISTINCT o.OrderID) >= 5 OR SUM(o.TotalDue) BETWEEN 250 AND 500 THEN 'Medium Performer'
 		ELSE 'Low Performer'
-    END salesperson_category,
-    ROUND(SUM(o.TotalDue), 2) AS total_sales,
-    COUNT(DISTINCT o.OrderID) AS total_orders,
-    SUM(oi.Quantity) AS total_items_sold
-FROM salesperson sp
+    	END salesperson_category,
+    	ROUND(SUM(o.TotalDue), 2) AS total_sales,
+    	COUNT(DISTINCT o.OrderID) AS total_orders,
+    	SUM(oi.Quantity) AS total_items_sold
+FROM 
+	salesperson sp
 	JOIN orders o 
 		ON sp.SalespersonID = o.SalespersonID
 	JOIN orderitem oi 
 		ON o.OrderID = oi.OrderID
-GROUP BY sp.SalespersonID, sp.FirstName, sp.LastName
-ORDER BY total_sales DESC;
+GROUP BY 
+	sp.SalespersonID, sp.FirstName, sp.LastName
+ORDER BY 
+	total_sales DESC;
 
 
 -- 10. Customer Segmentation
 SELECT 
 	c.CustomerID,
-    c.FirstName,
-    c.LastName,
+	c.FirstName,
+	c.LastName,
 	CASE 
 		WHEN COUNT(DISTINCT o.OrderID) >= 3 OR SUM(o.TotalDue) > 400 THEN 'Top Buyer'
 		ELSE 'New'
-    END customer_category,
-    ROUND(SUM(o.TotalDue), 2) AS total_sales,
-    COUNT(DISTINCT o.OrderID) AS total_orders,
-    SUM(oi.Quantity) AS total_items_sold
-FROM customer c
+    	END customer_category,
+    	ROUND(SUM(o.TotalDue), 2) AS total_sales,
+    	COUNT(DISTINCT o.OrderID) AS total_orders,
+    	SUM(oi.Quantity) AS total_items_sold
+FROM 
+	customer c
 	JOIN orders o 
 		ON c.CustomerID = o.CustomerID
 	JOIN orderitem oi 
@@ -270,9 +295,12 @@ FROM (
 	SELECT 
 		DATE_FORMAT(CreationDate, '%Y-%m-01') AS CreationDate,
 		SUM(TotalDue) AS TotalDue
-	FROM orders
-	WHERE Status = 'paid'
-	GROUP BY DATE_FORMAT(CreationDate, '%Y-%m-01')
+	FROM 
+		orders
+	WHERE 
+		Status = 'paid'
+	GROUP BY 
+		DATE_FORMAT(CreationDate, '%Y-%m-01')
 ) AS monthly_data;
 
 
@@ -282,13 +310,16 @@ WITH total_sales_category AS (
 	SELECT
 		p.Variety,
 		SUM(o.TotalDue) AS total_sales_cat
-	FROM product p
+	FROM 
+		product p
 		JOIN orderitem oi
 			ON p.ProductID = oi.ProductID
 		JOIN orders o 
 			ON o.OrderID = oi.OrderID
-	WHERE o.Status = 'paid'
-	GROUP BY p.Variety
+	WHERE 
+		o.Status = 'paid'
+	GROUP BY 
+		p.Variety
 )
 
 SELECT 
@@ -296,8 +327,10 @@ SELECT
 	total_sales_cat,
 	SUM(total_sales_cat) OVER () AS overall_sales,
 	CONCAT(ROUND((total_sales_cat * 100.0) / SUM(total_sales_cat) OVER (), 2), '%') AS contribution_percentage
-FROM total_sales_category
-ORDER BY total_sales_cat DESC;
+FROM 
+	total_sales_category
+ORDER BY 
+	total_sales_cat DESC;
 
 
 -- 13. Performance Analysis
@@ -308,13 +341,16 @@ WITH yearly_product_sales AS (
 		p.variety AS product_name,
 		SUM(o.TotalDue) AS total_sales,
 		YEAR(o.CreationDate) AS order_year
-	FROM product p
+	FROM 
+		product p
 		JOIN orderitem oi
 			ON p.ProductID = oi.ProductID
 		JOIN orders o 
 			ON o.OrderID = oi.OrderID
-	WHERE o.Status = 'paid'
-	GROUP BY YEAR(o.CreationDate), p.Variety
+	WHERE 
+		o.Status = 'paid'
+	GROUP BY 
+		YEAR(o.CreationDate), p.Variety
 )
 
 SELECT 
