@@ -19,6 +19,7 @@ This project uses data from [this GitHub repository](https://github.com/haonguye
 
 ## Project Structure
 ### 1. Database setup
+```sql
 CREATE DATABASE water_retail_sales;
 USE water_retail_sales;
 
