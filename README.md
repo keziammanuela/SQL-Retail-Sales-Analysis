@@ -7,7 +7,7 @@ data by applying SQL queries, aggregations, and window functions.
 
 By creating and using a structured water retail sales database (including Customer, SalesPerson, Orders, Product, and OrderItem tables), this project covers the following aspects:
 ### Objectives
-* Aggregate monthly and yearly sales data
+- Aggregate monthly and yearly sales data
 - Analyze product performance across categories and time
 - Segment salespersons by performance
 - Segment customer based on purchasing behavior
